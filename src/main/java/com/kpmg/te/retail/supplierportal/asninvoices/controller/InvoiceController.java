@@ -1,14 +1,15 @@
 package com.kpmg.te.retail.supplierportal.asninvoices.controller;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.dao.InvoiceDao;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceMaster;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.ItemMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.manager.InvoiceManager;
 import com.kpmg.te.retail.supplierportal.asninvoices.utils.ASNInvoiceUtils;
@@ -47,9 +48,17 @@ public class InvoiceController {
 		return invoiceDao.getPoItems(poIdList);
 	}
 
-	public void createNewInvoice(List<InvoiceMaster> invoiceMaster) {
-		// TODO Auto-generated method stub
+	public String createNewInvoice(InvoiceMaster invoiceMaster) throws ClassNotFoundException, ParseException {
+		return invoiceDao.createNewInvoice(invoiceMaster);
 
+	}
+
+	public ArrayList<String> getStoreDetailsData() throws ClassNotFoundException, SQLException {
+		return invoiceDao.getStoreDetails();
+	}
+
+	public ArrayList<ItemMaster> getItemCost(String[] itemIdList) throws ClassNotFoundException, SQLException {
+		return invoiceDao.getItemCost(itemIdList);
 	}
 
 }

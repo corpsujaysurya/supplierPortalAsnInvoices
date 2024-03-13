@@ -9,6 +9,7 @@ public class InvoicedItems {
 	private String mrp;
 	private String invoicedPrice;
 	private String totalPrice;
+	private String picklistFlag;
 
 	public String getItemId() {
 		return itemId;
@@ -65,12 +66,20 @@ public class InvoicedItems {
 	public void setTotalPrice(String totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+	
+	public String getPicklistFlag() {
+		return picklistFlag;
+	}
+
+	public void setPicklistFlag(String picklistFlag) {
+		this.picklistFlag = picklistFlag;
+	}
 
 	@Override
 	public String toString() {
 		return "InvoicedItems [itemId=" + itemId + ", itemName=" + itemName + ", poNum=" + poNum + ", invoicedQuantity="
 				+ invoicedQuantity + ", mrp=" + mrp + ", invoicedPrice=" + invoicedPrice + ", totalPrice=" + totalPrice
-				+ "]";
+				+ ", picklistFlag=" + picklistFlag + "]";
 	}
 
 }

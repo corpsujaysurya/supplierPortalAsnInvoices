@@ -1,6 +1,5 @@
 package com.kpmg.te.retail.supplierportal.asninvoices.entity;
 
-import java.util.ArrayList;
 
 public class InvoiceMaster {
 
@@ -24,9 +23,9 @@ public class InvoiceMaster {
 	private String senderAddress;
 	private String created_datetime;
 	private String customerId;
-	private String itemDetails;
+	//private String itemDetails;
 
-	private ArrayList<InvoicedItems> InvoicedItems;
+	private String invoicedItems;
 
 	public String getUniqueId() {
 		return uniqueId;
@@ -172,12 +171,12 @@ public class InvoiceMaster {
 		this.created_datetime = created_datetime;
 	}
 
-	public ArrayList<InvoicedItems> getInvoicedItems() {
-		return InvoicedItems;
+	public String getInvoicedItems() {
+		return invoicedItems;
 	}
 
-	public void setInvoicedItems(ArrayList<InvoicedItems> invoicedItems) {
-		InvoicedItems = invoicedItems;
+	public void setInvoicedItems(String invoicedItems) {
+		this.invoicedItems = invoicedItems;
 	}
 
 	public String getPoNumber() {
@@ -195,14 +194,6 @@ public class InvoiceMaster {
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
-	
-	public String getItemDetails() {
-		return itemDetails;
-	}
-
-	public void setItemDetails(String itemDetails) {
-		this.itemDetails = itemDetails;
-	}
 
 	@Override
 	public String toString() {
@@ -214,7 +205,8 @@ public class InvoiceMaster {
 				+ invoiceDueDate + ", totalItemQty=" + totalItemQty + ", totalUniqueItems=" + totalUniqueItems
 				+ ", attachments=" + attachments + ", deliveryAddress=" + deliveryAddress + ", senderAddress="
 				+ senderAddress + ", created_datetime=" + created_datetime + ", customerId=" + customerId
-				+ ", itemDetails=" + itemDetails + ", InvoicedItems=" + InvoicedItems + "]";
+				+ ", invoicedItems=" + invoicedItems + "]";
 	}
+	
 
 }

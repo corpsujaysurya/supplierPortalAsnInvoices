@@ -1,8 +1,8 @@
 package com.kpmg.te.retail.supplierportal.asninvoices.service;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.controller.InvoiceController;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceMaster;
-import com.kpmg.te.retail.supplierportal.asninvoices.entity.POItems;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.ItemMaster;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.manager.InvoiceManager;
 import com.kpmg.te.retail.supplierportal.asninvoices.utils.ASNInvoiceUtils;
 
@@ -42,15 +43,22 @@ public class InvoiceService {
 	public ArrayList<InvoiceMaster> getAllInvoiceData() throws ClassNotFoundException, SQLException {
 		ArrayList<InvoiceMaster> invoiceMasterList = new ArrayList<InvoiceMaster>();
 		invoiceMasterList = invoiceController.getAllInvoiceListingData();
-		logger.info("[C]ASNInvoiceService::[M]getAllInvoiceData -> The Invoice List to display is: "+invoiceMasterList.toString());
+		logger.info("[C]InvoiceService::[M]getAllInvoiceData -> The Invoice List to display is: "+invoiceMasterList.toString());
 		return  invoiceMasterList;
 	}
 	
 	@RequestMapping(path = "/invoice/getInvoiceDetails", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public InvoiceMaster getInvoiceDetails(@RequestParam(value="invoiceId") String invoiceId) throws ClassNotFoundException, SQLException {
 		InvoiceMaster invoiceDetails = invoiceController.getInvoiceDetailsData(invoiceId);
-		logger.info("[C]ASNInvoiceService::[M]getInvoiceDetails -> The Invoice Details list to display is: "+invoiceDetails.toString());
+		logger.info("[C]InvoiceService::[M]getInvoiceDetails -> The Invoice Details list to display is: "+invoiceDetails.toString());
 		return  invoiceDetails;
+	}
+	
+	@RequestMapping(path = "/invoice/getStoreDetails", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<String> getStoreDetails() throws ClassNotFoundException, SQLException {
+		ArrayList<String> storeDetailsList = invoiceController.getStoreDetailsData();
+		logger.info("[C]InvoiceService::[M]getStoreDetails -> The Store Details list to display is: "+storeDetailsList.toString());
+		return  storeDetailsList;
 	}
 	
 	/************************************************************************************************************************************************************************** */
@@ -61,7 +69,7 @@ public class InvoiceService {
 	public String sendPaymentReminder(@RequestParam(value="invoiceIdArray[]") String[] invoiceIdList) throws ClassNotFoundException, SQLException {
 		String message  = new String();
 		invoiceController.sendPaymentReminder(invoiceIdList);
-		logger.info("[C]ASNInvoiceService::[M]sendPaymentReminder -> The payment reminder list to display is: "+invoiceIdList.toString());
+		logger.info("[C]InvoiceService::[M]sendPaymentReminder -> The payment reminder list to display is: "+invoiceIdList.toString());
 		return  message;
 	}
 	
@@ -71,19 +79,27 @@ public class InvoiceService {
 	/**************************************************************************************************************************************************************************/
 	
 	@RequestMapping(path = "/invoice/createInvoice", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String sendPaymentReminder(@RequestBody List<InvoiceMaster> invoiceMaster) throws ClassNotFoundException, SQLException {
+	public String createInvoice(@RequestBody InvoiceMaster invoiceMaster) throws ClassNotFoundException, SQLException, ParseException {
 		String message  = new String();
-		invoiceController.createNewInvoice(invoiceMaster);
-		logger.info("[C]ASNInvoiceService::[M]sendPaymentReminder -> The new invoice details to display is: "+invoiceMaster.toString());
+		message = invoiceController.createNewInvoice(invoiceMaster);
+		logger.info("[C]InvoiceService::[M]sendPaymentReminder -> The new invoice details to display is: "+invoiceMaster.toString());
 		return  message;
 	}
 	
 	@RequestMapping(path = "/invoice/getPoItems", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<POItems> getPoItems(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
-		ArrayList<POItems> poItemsList  = new ArrayList<POItems>();
-		invoiceController.getPoItems(poIdList);
-		logger.info("[C]ASNInvoiceService::[M]getPoItems -> The payment reminder list to display is: "+poItemsList.toString());
+	public ArrayList<PurchaseOrderMaster> getPoItems(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
+		ArrayList<PurchaseOrderMaster> poItemsList  = new ArrayList<PurchaseOrderMaster>();
+		poItemsList = invoiceController.getPoItems(poIdList);
+		logger.info("[C]InvoiceService::[M]getPoItems -> The payment reminder list to display is: "+poItemsList.toString());
 		return  poItemsList;
+	}
+	
+	@RequestMapping(path = "/invoice/populateCost", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<ItemMaster> getItemCost(@RequestParam(value="poIdArray[]") String[] itemIdList) throws ClassNotFoundException, SQLException {
+		ArrayList<ItemMaster> itemMasterList  = new ArrayList<ItemMaster>();
+		itemMasterList = invoiceController.getItemCost(itemIdList);
+		logger.info("[C]InvoiceService::[M]getPoItems -> The payment reminder list to display is: "+itemMasterList.toString());
+		return  itemMasterList;
 	}
 	
 }
