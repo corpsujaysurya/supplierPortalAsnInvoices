@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.constants.ASNInvoiceConstants;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceMaster;
-import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoicedItems;
-import com.kpmg.te.retail.supplierportal.asninvoices.entity.POItems;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.utils.ASNInvoiceUtils;
-
+@Component
 public class InvoiceDao {
 
 	@Autowired
@@ -37,11 +37,15 @@ public class InvoiceDao {
 		conn.close();
 	}
 
+	/***********************************************************************************************************************************************/
+	/* 													Get Invoice Listing Data																  */
+	/*********************************************************************************************************************************************/
+	
 	public ArrayList<InvoiceMaster> getAllInvData() throws SQLException, ClassNotFoundException {
 		InvoiceMaster inVoiceMasterObj;
 		ArrayList<InvoiceMaster> invoiceMasterList = new ArrayList<InvoiceMaster>();
 		Connection conn = getConnectioDetails();
-		String query = "SELECT  * from SUPPLIER_PORTAL.INVOICEMASTER ORDER BY CREATED_DATETIME DESC LIMIT 20";
+		String query = "SELECT  * from SUPPLIER_PORTAL.INVOICE_MASTER ORDER BY CREATED_DATETIME DESC LIMIT 20";
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next()) {
@@ -55,20 +59,25 @@ public class InvoiceDao {
 			inVoiceMasterObj.setInvoiceStatus(rs.getString("INVOICE_STATUS"));
 			inVoiceMasterObj.setInvoiceOnHoldFlag(rs.getString("INVOICE_ON_HOLD_FLAG"));
 			inVoiceMasterObj.setInvoiceDueDate(rs.getString("INVOICE_DUE_DATE"));
+			inVoiceMasterObj.setInvoicePaymentStatus(rs.getString("INVOICE_PAYMENT_STATUS"));
 			invoiceMasterList.add(inVoiceMasterObj);
 		}
 		logger.info("[C]InvoiceDao::[M]getAllInvData -> The Invoice list is: " + invoiceMasterList.toString());
 		return invoiceMasterList;
 	}
 
+	/***********************************************************************************************************************************************/
+	/* 													Get Invoice Details Data																  */
+	/*********************************************************************************************************************************************/
 	public InvoiceMaster getInvoiceDetails(String invoiceId) throws ClassNotFoundException, SQLException {
 		InvoiceMaster inVoiceMasterObj = null;
 		Connection conn = getConnectioDetails();
-		String query = "SELECT  * from SUPPLIER_PORTAL.INVOICEMASTER WHERE INVOICE_ID = '" + invoiceId + "'";
+		String query = "SELECT  * from SUPPLIER_PORTAL.INVOICE_MASTER WHERE INVOICE_ID = '" + invoiceId + "'";
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next()) {
 			inVoiceMasterObj = new InvoiceMaster();
+			inVoiceMasterObj.setUniqueId(rs.getString("UNIQUE_ID"));
 			inVoiceMasterObj.setInvoiceId(rs.getString("INVOICE_ID"));
 			inVoiceMasterObj.setInvoiceDate(rs.getString("INVOICE_DATE"));
 			inVoiceMasterObj.setInvoiceType(rs.getString("INVOICE_TYPE"));
@@ -84,37 +93,16 @@ public class InvoiceDao {
 			inVoiceMasterObj.setInvoiceTotalAmount(rs.getString("INVOICE_TOTAL_AMOUNT"));
 			inVoiceMasterObj.setInvoiceDueAmount(rs.getString("INVOICE_DUE_AMOUNT"));
 			inVoiceMasterObj.setNettedAmt(rs.getString("NETTED_AMOUNT"));
-			inVoiceMasterObj.setInvoiceStatus(rs.getString("INVOICE_STATUS"));
+			inVoiceMasterObj.setInvoicePaymentStatus(rs.getString("INVOICE_PAYMENT_STATUS"));
 			inVoiceMasterObj.setInvoiceOnHoldFlag(rs.getString("INVOICE_ON_HOLD_FLAG"));
 			inVoiceMasterObj.setInvoiceDueDate(rs.getString("INVOICE_DUE_DATE"));
+			inVoiceMasterObj.setPoNumber(rs.getString("PO_NUMBER"));
+			inVoiceMasterObj.setCreated_datetime(rs.getString("CREATED_DATETIME"));
+			inVoiceMasterObj.setCustomerId(rs.getString("CUSTOMER_ID"));
+			inVoiceMasterObj.setItemDetails(rs.getString("ITEM_DETAILS")); //Contains PO Data as JSON to be parsed by UI
 		}
 		logger.info("[C]InvoiceDao::[M]getInvoiceDetails -> The Invoice details is: " + inVoiceMasterObj.toString());
 		return inVoiceMasterObj;
-	}
-
-	public ArrayList<InvoicedItems> getAllInvoicedItemsFromDB(String string)
-			throws ClassNotFoundException, SQLException {
-		ArrayList<InvoicedItems> invoicedItemsList = new ArrayList<InvoicedItems>();
-		InvoicedItems inVoicedItem = null;
-		Connection conn = getConnectioDetails();
-		String[] polist = string.split(",");
-		for (String po : polist) {
-			String query = "SELECT  * from SUPPLIER_PORTAL.INVOICED_ITEMS WHERE PO_NUMBER = '" + po + "'";
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(query);
-			while (rs.next()) {
-				inVoicedItem = new InvoicedItems();
-				inVoicedItem.setItemId(rs.getString("ITEM_ID"));
-				inVoicedItem.setItemName(rs.getString("ITEM_NAME"));
-				inVoicedItem.setPoNum(rs.getString("PO_NUMBER"));
-				inVoicedItem.setInvoicedQuantity(rs.getInt("INVOICED_QTY"));
-				inVoicedItem.setMrp(rs.getString("ITEM_MRP"));
-				inVoicedItem.setInvoicedPrice(rs.getString("INVOICED_PRICE"));
-				inVoicedItem.setTotalPrice(rs.getString("TOTAL_PRICE"));
-				invoicedItemsList.add(inVoicedItem);
-			}
-		}
-		return invoicedItemsList;
 	}
 
 
@@ -123,16 +111,19 @@ public class InvoiceDao {
 		try {
 			Connection conn = getConnectioDetails();
 			conn.setAutoCommit(true);
-			String insertQuery = "INSERT INTO SUPPLIER_PORTAL.INVOICE_REMINDER(INVOICE_ID,CUSTOMER_ID,REMINDER_DATE)"
-					+ " VALUES" + "(?, ?)";
+			String insertQuery = "INSERT INTO SUPPLIER_PORTAL.INVOICE_REMINDER(UNIQUE_ID,INVOICE_ID,CUSTOMER_ID,REMINDER_DATE)"
+					+ " VALUES" + "(?, ?, ?, ?)";
+			logger.info(insertQuery);
 			preparedStatement = conn.prepareStatement(insertQuery);
-			preparedStatement.setString(1, invoiceId);
-			preparedStatement.setString(2, customerId);
-			preparedStatement.setString(3, dateTime);
+			preparedStatement.setString(1, asnInvoicUtils.setRandomUUID());
+			preparedStatement.setString(2, invoiceId);
+			preparedStatement.setString(3, customerId);
+			preparedStatement.setString(4, dateTime);
 			preparedStatement.addBatch();
+			preparedStatement.executeBatch();
 			preparedStatement.close();
 			conn.close();
-			return " Record Inserterd Successfully";
+			return " Record Inserterd Successfully into Invoices reminder table";
 		} catch (SQLException ex) {
 			System.err.println("SQLException information");
 			while (ex != null) {
@@ -144,27 +135,20 @@ public class InvoiceDao {
 		}
 	}
 
-	public ArrayList<POItems> getPoItems(String[] poIdList) {
-		ArrayList<InvoicedItems> invoicedItemsList = new ArrayList<InvoicedItems>();
-		InvoicedItems inVoicedItem = null;
+	public ArrayList<PurchaseOrderMaster> getPoItems(String[] poIdList) throws SQLException, ClassNotFoundException {
+		ArrayList<PurchaseOrderMaster> poItemsList = new ArrayList<PurchaseOrderMaster>();
+		PurchaseOrderMaster poMaster = null;
 		Connection conn = getConnectioDetails();
 		for (String po : poIdList) {
-			String query = "SELECT  * from SUPPLIER_PORTAL.POITEMS WHERE PO_NUMBER = '" + po + "'";
+			String query = "SELECT  * from SUPPLIER_PORTAL.PURCHASE_ORDER_MASTER WHERE PO_NUMBER = '" + po + "'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
-				inVoicedItem = new InvoicedItems();
-				inVoicedItem.setItemId(rs.getString("ITEM_ID"));
-				inVoicedItem.setItemName(rs.getString("ITEM_NAME"));
-				inVoicedItem.setPoNum(rs.getString("PO_NUMBER"));
-				inVoicedItem.setInvoicedQuantity(rs.getInt("INVOICED_QTY"));
-				inVoicedItem.setMrp(rs.getString("ITEM_MRP"));
-				inVoicedItem.setInvoicedPrice(rs.getString("INVOICED_PRICE"));
-				inVoicedItem.setTotalPrice(rs.getString("TOTAL_PRICE"));
-				invoicedItemsList.add(inVoicedItem);
+				poMaster = new PurchaseOrderMaster();
+				poMaster.setItemDetails(rs.getString("ITEM_DETAILS"));
+				poItemsList.add(poMaster);
 			}
 		}
-		return invoicedItemsList;
-
+		return poItemsList;
 	}
 }

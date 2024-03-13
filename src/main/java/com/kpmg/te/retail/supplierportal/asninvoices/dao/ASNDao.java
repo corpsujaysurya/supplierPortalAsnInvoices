@@ -2,11 +2,11 @@ package com.kpmg.te.retail.supplierportal.asninvoices.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +16,16 @@ import com.kpmg.te.retail.supplierportal.asninvoices.constants.ASNInvoiceConstan
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNStores;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNSupplierSites;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.utils.ASNInvoiceUtils;
 
 @Component
 public class ASNDao {
 
 	private static final Logger logger = Logger.getLogger(ASNDao.class.getName());
-	
-	@Autowired ASNInvoiceUtils asnInvoiceUtils;
-	
+
+	@Autowired
+	ASNInvoiceUtils asnInvoiceUtils;
 
 	public Connection getConnectioDetails() throws ClassNotFoundException, SQLException {
 		String myDriver = ASNInvoiceConstants.myDriver;
@@ -38,31 +39,31 @@ public class ASNDao {
 	public void closeConnection(Connection conn) throws SQLException {
 		conn.close();
 	}
-	
+
 	public ArrayList<ASNMaster> getAsnListingData() throws ClassNotFoundException, SQLException {
 		ASNMaster asnMasterObj;
-			ArrayList<ASNMaster> asnMasterList = new ArrayList<ASNMaster>();
-			Connection conn = getConnectioDetails();
-			String query = "SELECT  ASNID,ASNCREATIONDATE,SHIPPINGDATE,DELIVERYNOTENO,ASNSTATUS from SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER ORDER BY ASNCREATIONDATE DESC LIMIT 20";
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(query);
-			while (rs.next()) {
-				asnMasterObj = new ASNMaster();
-				asnMasterObj.setAsnId(rs.getString("ASNID"));
-				asnMasterObj.setAsnCreationDate(rs.getString("ASNCREATIONDATE"));
-				asnMasterObj.setShippingDate(rs.getString("SHIPPINGDATE"));
-				asnMasterObj.setDeliveryNoteNo(rs.getString("DELIVERYNOTENO"));
-				asnMasterObj.setAsnStatus(rs.getString("ASNSTATUS"));
-				asnMasterList.add(asnMasterObj);
-			}
-			logger.info("[C]ASNDao::[M]getAsnListingData -> The ASN list is: " + asnMasterList.toString());
-			return asnMasterList;
+		ArrayList<ASNMaster> asnMasterList = new ArrayList<ASNMaster>();
+		Connection conn = getConnectioDetails();
+		String query = "SELECT  ASNID,ASNCREATIONDATE,SHIPPINGDATE,DELIVERYNOTENO,ASNSTATUS from SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER ORDER BY ASNCREATIONDATE DESC LIMIT 20";
+		Statement st = conn.createStatement();
+		ResultSet rs = st.executeQuery(query);
+		while (rs.next()) {
+			asnMasterObj = new ASNMaster();
+			asnMasterObj.setAsnId(rs.getString("ASNID"));
+			asnMasterObj.setAsnCreationDate(rs.getString("ASNCREATIONDATE"));
+			asnMasterObj.setShippingDate(rs.getString("SHIPPINGDATE"));
+			asnMasterObj.setDeliveryNoteNo(rs.getString("DELIVERYNOTENO"));
+			asnMasterObj.setAsnStatus(rs.getString("ASNSTATUS"));
+			asnMasterList.add(asnMasterObj);
 		}
+		logger.info("[C]ASNDao::[M]getAsnListingData -> The ASN list is: " + asnMasterList.toString());
+		return asnMasterList;
+	}
 
 	public ASNMaster getAsnDetailsData(String asnId) throws SQLException, ClassNotFoundException {
 		ASNMaster asnMasterObj = null;
 		Connection conn = getConnectioDetails();
-		String query = "SELECT  * from SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER WHERE ASNID = '" + asnId +"'" ;
+		String query = "SELECT  * from SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER WHERE ASNID = '" + asnId + "'";
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next()) {
@@ -131,18 +132,78 @@ public class ASNDao {
 			asnSupplierSites.setSiteStatus(rs.getString("SITESTATUS"));
 			asnSupplierSitesList.add(asnSupplierSites);
 		}
-		logger.info("[C]ASNDao::[M]getAsnSupplierSites -> The ASN Supplier Site list is: " + asnSupplierSitesList.toString());
+		logger.info("[C]ASNDao::[M]getAsnSupplierSites -> The ASN Supplier Site list is: "
+				+ asnSupplierSitesList.toString());
 		return asnSupplierSitesList;
 	}
 
-	public String saveASNdata(List<ASNMaster> asnMaster) {
-		// TODO Auto-generated method stub
-		return null;
+	public String saveASNdata(ASNMaster asnMaster) throws SQLException, ClassNotFoundException {
+		Connection conn = null;
+		String status = new String();
+		try {
+			conn = getConnectioDetails();
+			PreparedStatement pstmt = conn.prepareStatement(
+					"INSERT INTO SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER (ASNID,ASNCREATIONDATE,SHIPPINGDATE,DELIVERYNOTENO,ASNSTATUS,PONUM,CONTAINERDETAILS,SHIPPEDQTY,"
+							+ "ESTIMATEDDELDATE,EWAYNO,AWBNO,DRIVERNAME,VEHICLENO,MODEOFTRANSPORT,TRANSPORTCOMPNAME,CONSIGNMENTWEIGHT,DRIVERLICENSENO,"
+							+ "SHIPPINGADDR,DELADDR,CONSIGNMENTCOST,PERMITLEVEL,VEHICLEENGNO,VEHICLECHASSIESNO,EWAYBILLNO,EWAYBILLDATE,PREFERREDDELDATE,PREFERREDDELTIME)"
+							+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			pstmt.setString(1, asnMaster.getAsnId());
+			pstmt.setString(2, asnMaster.getAsnCreationDate());
+			pstmt.setString(3, asnMaster.getShippingDate());
+			pstmt.setString(4, asnMaster.getDeliveryNoteNo());
+			pstmt.setString(5, asnMaster.getAsnStatus());
+			pstmt.setString(6, asnMaster.getPoNum());
+
+			pstmt.setString(7, asnMaster.getContainerDetails());
+			pstmt.setString(8, asnMaster.getShippedQty());
+			pstmt.setString(9, asnMaster.getEstimatedDelDate());
+			pstmt.setString(10, asnMaster.getEwayBillNo());
+			pstmt.setString(11, asnMaster.getAwbNo());
+
+			pstmt.setString(12, asnMaster.getDriverName());
+			pstmt.setString(13, asnMaster.getVehicleNo());
+			pstmt.setString(14, asnMaster.getModeOfTransport());
+			pstmt.setString(15, asnMaster.getTransportCompName());
+			pstmt.setString(16, asnMaster.getConsignmentWeight());
+
+			pstmt.setString(17, asnMaster.getDriverLicenseNo());
+			pstmt.setString(18, asnMaster.getShippingAddr());
+			pstmt.setString(19, asnMaster.getDelAddr());
+			pstmt.setString(20, asnMaster.getConsignmentCost());
+			pstmt.setString(21, asnMaster.getPermitLevel());
+			pstmt.setString(22, asnMaster.getVehicleEngNo());
+
+			pstmt.setString(23, asnMaster.getVehicleChassiesNo());
+			pstmt.setString(24, asnMaster.getEwayBillNo());
+			pstmt.setString(25, asnMaster.getPreferredDelDate());
+			pstmt.setString(26, asnMaster.getPreferredDelTime());
+
+			int updateStatusCode = pstmt.executeUpdate();
+			status = (updateStatusCode == 1 ? ("Record inserted in DB Successfully") : ("Onboarding failed"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(conn);
+		}
+		return status;
 	}
 
-	public String getPOitems(String[] poIdList) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<PurchaseOrderMaster> getPOitems(String[] poIdList) throws SQLException, ClassNotFoundException {
+		ArrayList<PurchaseOrderMaster> poMasterList = new ArrayList<PurchaseOrderMaster>();
+		PurchaseOrderMaster poMaster = null;
+		Connection conn = getConnectioDetails();
+		for (String po : poIdList) {
+			String query = "SELECT  * from SUPPLIER_PORTAL.PURCHASE_ORDER_MASTER WHERE PO_NUMBER = '" + po + "'";
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
+				poMaster = new PurchaseOrderMaster();
+				poMaster.setPoNumber(rs.getString("ITEM_DETAILS"));
+				poMasterList.add(poMaster);
+			}
+		}
+		return poMasterList;
+		// **** ITEM DETAILS FIELD SHOULD BE A JSON OBJECT ***************//
 	}
 
 }

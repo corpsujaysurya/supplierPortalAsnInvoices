@@ -2,15 +2,17 @@ package com.kpmg.te.retail.supplierportal.asninvoices.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.dao.ASNDao;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNStores;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNSupplierSites;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 
+@Component
 public class ASNController {
 	
 	@Autowired
@@ -32,15 +34,15 @@ public class ASNController {
 		return asnDao.getAsnSupplierSites();
 	}
 
-	public String saveASN(List<ASNMaster> asnMaster) {
+	public String saveASN(ASNMaster asnMaster) throws ClassNotFoundException, SQLException {
 		String status = asnDao.saveASNdata(asnMaster);
 		return status;
 		
 	}
 
-	public String getPoItems(String[] poIdList) {
-		String status = asnDao.getPOitems(poIdList);
-		return status;
+	public ArrayList<PurchaseOrderMaster> getPoItems(String[] poIdList) throws ClassNotFoundException, SQLException {
+		ArrayList<PurchaseOrderMaster> poMasterItemsList = asnDao.getPOitems(poIdList);
+		return poMasterItemsList;
 	}
 
 

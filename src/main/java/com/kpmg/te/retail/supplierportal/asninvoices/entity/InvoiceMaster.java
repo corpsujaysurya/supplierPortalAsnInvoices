@@ -24,6 +24,7 @@ public class InvoiceMaster {
 	private String senderAddress;
 	private String created_datetime;
 	private String customerId;
+	private String itemDetails;
 
 	private ArrayList<InvoicedItems> InvoicedItems;
 
@@ -194,6 +195,14 @@ public class InvoiceMaster {
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
+	
+	public String getItemDetails() {
+		return itemDetails;
+	}
+
+	public void setItemDetails(String itemDetails) {
+		this.itemDetails = itemDetails;
+	}
 
 	@Override
 	public String toString() {
@@ -205,7 +214,7 @@ public class InvoiceMaster {
 				+ invoiceDueDate + ", totalItemQty=" + totalItemQty + ", totalUniqueItems=" + totalUniqueItems
 				+ ", attachments=" + attachments + ", deliveryAddress=" + deliveryAddress + ", senderAddress="
 				+ senderAddress + ", created_datetime=" + created_datetime + ", customerId=" + customerId
-				+ ", InvoicedItems=" + InvoicedItems + "]";
+				+ ", itemDetails=" + itemDetails + ", InvoicedItems=" + InvoicedItems + "]";
 	}
 
 }
