@@ -53,5 +53,12 @@ public class ASNInvoiceUtils {
 		return format.format(calendar.getTime());
 	}
 
+	public String generateASNId() {
+		String asnID = "ASN-" + generateRandomNumber(7);
+		logger.info(
+				"[C]OrderManagementUtils::[M]generateASNId -> The ASN ID generated is:" + asnID.toString());
+		return asnID;
+	}
+
 
 }

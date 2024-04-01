@@ -2,9 +2,18 @@ package com.kpmg.te.retail.supplierportal.asninvoices.entity;
 
 public class ASNStores {
 
+	private String storeId;
 	private String storeName;
 	private String storeAddr;
 	private String storeStatus;
+
+	public String getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
+	}
 
 	public String getStoreName() {
 		return storeName;
@@ -32,7 +41,8 @@ public class ASNStores {
 
 	@Override
 	public String toString() {
-		return "ASNStores [storeName=" + storeName + ", storeAddr=" + storeAddr + ", storeStatus=" + storeStatus + "]";
+		return "ASNStores [storeId=" + storeId + ", storeName=" + storeName + ", storeAddr=" + storeAddr
+				+ ", storeStatus=" + storeStatus + "]";
 	}
 
 }

@@ -2,6 +2,7 @@ package com.kpmg.te.retail.supplierportal.asninvoices.entity;
 
 public class ASNMaster {
 
+	private String uniqueId;
 	private String asnId;
 	private String asnCreationDate;
 	private String shippingDate;
@@ -9,6 +10,9 @@ public class ASNMaster {
 	private String asnStatus;
 	private String poNum;
 	private String containerDetails;
+	private String containerCount;
+	private String containerId;
+
 	private String shippedQty;
 	private String estimatedDelDate;
 	private String ewayNo;
@@ -30,6 +34,14 @@ public class ASNMaster {
 	private String preferredDelDate;
 	private String preferredDelTime;
 
+	public String getUniqueId() {
+		return uniqueId;
+	}
+
+	public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
+	}
+
 	public String getAsnId() {
 		return asnId;
 	}
@@ -46,6 +58,14 @@ public class ASNMaster {
 		this.asnCreationDate = asnCreationDate;
 	}
 
+	public String getContainerId() {
+		return containerId;
+	}
+
+	public void setContainerId(String containerId) {
+		this.containerId = containerId;
+	}
+
 	public String getShippingDate() {
 		return shippingDate;
 	}
@@ -56,6 +76,14 @@ public class ASNMaster {
 
 	public String getDeliveryNoteNo() {
 		return deliveryNoteNo;
+	}
+
+	public String getContainerCount() {
+		return containerCount;
+	}
+
+	public void setContainerCount(String containerCount) {
+		this.containerCount = containerCount;
 	}
 
 	public void setDeliveryNoteNo(String deliveryNoteNo) {
@@ -248,9 +276,10 @@ public class ASNMaster {
 
 	@Override
 	public String toString() {
-		return "ASNMaster [asnId=" + asnId + ", asnCreationDate=" + asnCreationDate + ", shippingDate=" + shippingDate
-				+ ", deliveryNoteNo=" + deliveryNoteNo + ", asnStatus=" + asnStatus + ", poNum=" + poNum
-				+ ", containerDetails=" + containerDetails + ", shippedQty=" + shippedQty + ", estimatedDelDate="
+		return "ASNMaster [uniqueId=" + uniqueId + ", asnId=" + asnId + ", asnCreationDate=" + asnCreationDate
+				+ ", shippingDate=" + shippingDate + ", deliveryNoteNo=" + deliveryNoteNo + ", asnStatus=" + asnStatus
+				+ ", poNum=" + poNum + ", containerDetails=" + containerDetails + ", containerCount=" + containerCount
+				+ ", containerId=" + containerId + ", shippedQty=" + shippedQty + ", estimatedDelDate="
 				+ estimatedDelDate + ", ewayNo=" + ewayNo + ", awbNo=" + awbNo + ", driverName=" + driverName
 				+ ", vehicleNo=" + vehicleNo + ", modeOfTransport=" + modeOfTransport + ", transportCompName="
 				+ transportCompName + ", consignmentWeight=" + consignmentWeight + ", driverLicenseNo="

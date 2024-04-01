@@ -82,7 +82,7 @@ public class InvoiceService {
 	public String createInvoice(@RequestBody InvoiceMaster invoiceMaster) throws ClassNotFoundException, SQLException, ParseException {
 		String message  = new String();
 		message = invoiceController.createNewInvoice(invoiceMaster);
-		logger.info("[C]InvoiceService::[M]sendPaymentReminder -> The new invoice details to display is: "+invoiceMaster.toString());
+		logger.info("[C]InvoiceService::[M]createInvoice -> The new invoice details to display is: "+invoiceMaster.toString());
 		return  message;
 	}
 	
