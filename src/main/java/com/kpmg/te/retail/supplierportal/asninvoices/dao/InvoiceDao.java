@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.constants.ASNInvoiceConstants;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ItemMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
@@ -139,10 +140,11 @@ public class InvoiceDao {
 		}
 	}
 
-	public ArrayList<PurchaseOrderMaster> getPoItems(String[] poIdList) throws SQLException, ClassNotFoundException {
+	public ArrayList<InvoiceItemDetails> getPoItems(String[] poIdList) throws SQLException, ClassNotFoundException {
 		ArrayList<PurchaseOrderMaster> poItemsList = new ArrayList<PurchaseOrderMaster>();
 		PurchaseOrderMaster poMaster = null;
 		Connection conn = getConnectioDetails();
+		ArrayList<InvoiceItemDetails> invoiceItemDetailsList = new ArrayList<InvoiceItemDetails>();
 		for (String po : poIdList) {
 			String query = "SELECT  * from SUPPLIER_PORTAL.PURCHASE_ORDER_MASTER WHERE PO_NUMBER = '" + po + "'";
 			logger.info(query);
@@ -154,11 +156,13 @@ public class InvoiceDao {
 				poMaster.setPoNumber(po);
 				poMaster.setItemDetails(rs.getString("ITEM_DETAILS"));
 				//logger.info(poMaster.toString());
+				asnInvoicUtils.jsonManipulate(poMaster.getItemDetails(),po,invoiceItemDetailsList);
 				poItemsList.add(poMaster);
 				logger.info("The poItemsList is: " + poItemsList.toString());
 			}
+			
 		}
-		return poItemsList;
+		return invoiceItemDetailsList;
 	}
 
 	public String createNewInvoice(InvoiceMaster invoiceMaster) throws ParseException, ClassNotFoundException {

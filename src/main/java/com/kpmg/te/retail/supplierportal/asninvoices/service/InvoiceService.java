@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.controller.InvoiceController;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ItemMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
@@ -87,11 +88,11 @@ public class InvoiceService {
 	}
 	
 	@RequestMapping(path = "/invoice/getPoItems", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<PurchaseOrderMaster> getPoItems(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
-		ArrayList<PurchaseOrderMaster> poItemsList  = new ArrayList<PurchaseOrderMaster>();
-		poItemsList = invoiceController.getPoItems(poIdList);
-		logger.info("[C]InvoiceService::[M]getPoItems -> The payment reminder list to display is: "+poItemsList.toString());
-		return  poItemsList;
+	public ArrayList<InvoiceItemDetails> getPoItems(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
+		ArrayList<InvoiceItemDetails> invoiceItemDetailsList  = new ArrayList<InvoiceItemDetails>();
+		invoiceItemDetailsList = invoiceController.getPoItems(poIdList);
+		logger.info("[C]InvoiceService::[M]getPoItems -> The Invoiced Item details list to display is: "+invoiceItemDetailsList.toString());
+		return  invoiceItemDetailsList;
 	}
 	
 	@RequestMapping(path = "/invoice/populateCost", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.dao.InvoiceDao;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ItemMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
@@ -44,7 +45,7 @@ public class InvoiceController {
 		}
 	}
 
-	public ArrayList<PurchaseOrderMaster> getPoItems(String[] poIdList) throws ClassNotFoundException, SQLException {
+	public ArrayList<InvoiceItemDetails> getPoItems(String[] poIdList) throws ClassNotFoundException, SQLException {
 		return invoiceDao.getPoItems(poIdList);
 	}
 

@@ -3,6 +3,7 @@ package com.kpmg.te.retail.supplierportal.asninvoices.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -10,6 +11,11 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.springframework.stereotype.Component;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceItemDetails;
 
 @Component
 public class ASNInvoiceUtils {
@@ -58,6 +64,23 @@ public class ASNInvoiceUtils {
 		logger.info(
 				"[C]OrderManagementUtils::[M]generateASNId -> The ASN ID generated is:" + asnID.toString());
 		return asnID;
+	}
+
+	public ArrayList<InvoiceItemDetails> jsonManipulate(String itemDetails,String po, ArrayList<InvoiceItemDetails> invoiceItemDetailsList) {
+		JsonObject jsonObject = JsonParser.parseString(itemDetails).getAsJsonObject();
+		logger.info("final json sujay: " + jsonObject.toString());
+		jsonObject.keySet().forEach(keyStr ->
+	    {
+	    	JsonObject keyvalue = (JsonObject) jsonObject.get(keyStr);
+	        logger.info("itemId: "+ keyStr + " value: " + keyvalue);
+	        	Gson gson = new Gson();
+	        	InvoiceItemDetails invoiceItemDetails  = gson.fromJson(keyvalue, InvoiceItemDetails.class);
+	        	invoiceItemDetails.setItemId(keyStr);
+	        	invoiceItemDetails.setPoNum(po);
+	        	invoiceItemDetailsList.add(invoiceItemDetails);
+	    });
+		logger.info("The invoiced items list are ----> : "+invoiceItemDetailsList.toString());
+		return invoiceItemDetailsList;
 	}
 
 
