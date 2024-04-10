@@ -68,7 +68,7 @@ public class ASNInvoiceUtils {
 
 	public ArrayList<InvoiceItemDetails> jsonManipulate(String itemDetails,String po, ArrayList<InvoiceItemDetails> invoiceItemDetailsList) {
 		JsonObject jsonObject = JsonParser.parseString(itemDetails).getAsJsonObject();
-		logger.info("final json sujay: " + jsonObject.toString());
+		//logger.info("final json sujay: " + jsonObject.toString());
 		jsonObject.keySet().forEach(keyStr ->
 	    {
 	    	JsonObject keyvalue = (JsonObject) jsonObject.get(keyStr);
