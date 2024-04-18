@@ -17,6 +17,7 @@ import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNStores;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNSupplierSites;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.POItems;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.manager.ASNManager;
 import com.kpmg.te.retail.supplierportal.asninvoices.utils.ASNInvoiceUtils;
 
@@ -73,10 +74,10 @@ public class ASNService {
 	}
 	
 	@RequestMapping(path = "/asn/getPoItems", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<POItems> getPoItemsForASN(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
-		ArrayList<POItems> poItemsList  = new ArrayList<POItems>();
-		asnController.getPoItems(poIdList);
-		logger.info("[C]ASNService::[M]getPoItems -> The payment reminder list to display is: "+poItemsList.toString());
+	public ArrayList<PurchaseOrderMaster> getPoItemsForASN(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
+		ArrayList<PurchaseOrderMaster> poItemsList  = new ArrayList<PurchaseOrderMaster>();
+		poItemsList = asnController.getPoItems(poIdList);
+		logger.info("[C]ASNService::[M]getPoItems -> The purchase order item list to display is: "+poItemsList.toString());
 		return  poItemsList;
 	}
 	

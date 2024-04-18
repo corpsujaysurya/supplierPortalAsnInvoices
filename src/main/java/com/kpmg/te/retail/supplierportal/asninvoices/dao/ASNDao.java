@@ -219,8 +219,10 @@ public class ASNDao {
 				poMaster = new PurchaseOrderMaster();
 				poMaster.setPoNumber(rs.getString("ITEM_DETAILS"));
 				poMasterList.add(poMaster);
+				logger.info("item_details is"+ poMaster);
 			}
 		}
+		logger.info("PO MASTER LIST IS : " + poMasterList);
 		return poMasterList;
 		// **** ITEM DETAILS FIELD SHOULD BE A JSON OBJECT ***************//
 	}
