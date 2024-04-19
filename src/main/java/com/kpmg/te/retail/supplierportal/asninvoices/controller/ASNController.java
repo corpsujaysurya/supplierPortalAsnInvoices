@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.dao.ASNDao;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNStores;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNSupplierSites;
-import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 
 @Component
 public class ASNController {
@@ -40,9 +40,9 @@ public class ASNController {
 		
 	}
 
-	public ArrayList<PurchaseOrderMaster> getPoItems(String[] poIdList) throws ClassNotFoundException, SQLException {
-		ArrayList<PurchaseOrderMaster> poMasterItemsList = asnDao.getPOitems(poIdList);
-		return poMasterItemsList;
+	public ArrayList<ASNItemDetails> getPoItems(String[] poIdList) throws ClassNotFoundException, SQLException {
+		ArrayList<ASNItemDetails> asnItemDetailsList = asnDao.getPOitems(poIdList);
+		return asnItemDetailsList;
 	}
 	
 	public String generateEway() {

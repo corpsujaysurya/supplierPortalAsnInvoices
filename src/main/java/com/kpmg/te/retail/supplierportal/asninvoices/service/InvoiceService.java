@@ -17,7 +17,6 @@ import com.kpmg.te.retail.supplierportal.asninvoices.controller.InvoiceControlle
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ItemMaster;
-import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.manager.InvoiceManager;
 import com.kpmg.te.retail.supplierportal.asninvoices.utils.ASNInvoiceUtils;
 

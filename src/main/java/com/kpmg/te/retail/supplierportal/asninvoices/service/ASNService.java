@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.controller.ASNController;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNStores;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNSupplierSites;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.POItems;
-import com.kpmg.te.retail.supplierportal.asninvoices.entity.PurchaseOrderMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.manager.ASNManager;
 import com.kpmg.te.retail.supplierportal.asninvoices.utils.ASNInvoiceUtils;
 
@@ -74,11 +74,11 @@ public class ASNService {
 	}
 	
 	@RequestMapping(path = "/getPoItems", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<PurchaseOrderMaster> getPoItemsForASN(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
-		ArrayList<PurchaseOrderMaster> poItemsList  = new ArrayList<PurchaseOrderMaster>();
-		poItemsList = asnController.getPoItems(poIdList);
-		logger.info("[C]ASNService::[M]getPoItems -> The purchase order item list to display is: "+poItemsList.toString());
-		return  poItemsList;
+	public ArrayList<ASNItemDetails> getPoItemsForASN(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
+		ArrayList<ASNItemDetails> asnItemDetailsList  = new ArrayList<ASNItemDetails>();
+		asnItemDetailsList = asnController.getPoItems(poIdList);
+		logger.info("[C]ASNService::[M]getPoItems -> The purchase order item list to display is: "+asnItemDetailsList.toString());
+		return  asnItemDetailsList;
 	}
 	
 	@RequestMapping(path = "/saveASN", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

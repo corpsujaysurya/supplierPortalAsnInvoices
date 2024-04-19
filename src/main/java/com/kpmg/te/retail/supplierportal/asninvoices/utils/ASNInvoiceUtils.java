@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.InvoiceItemDetails;
 
 @Component
@@ -81,6 +82,23 @@ public class ASNInvoiceUtils {
 	    });
 		logger.info("The invoiced items list are ----> : "+invoiceItemDetailsList.toString());
 		return invoiceItemDetailsList;
+	}
+	
+	public ArrayList<ASNItemDetails> jsonASNManipulate(String itemDetails,String po, ArrayList<ASNItemDetails> asnItemDetailsList) {
+		JsonObject jsonObject = JsonParser.parseString(itemDetails).getAsJsonObject();
+		//logger.info("final json sujay: " + jsonObject.toString());
+		jsonObject.keySet().forEach(keyStr ->
+	    {
+	    	JsonObject keyvalue = (JsonObject) jsonObject.get(keyStr);
+	        logger.info("itemId: "+ keyStr + " value: " + keyvalue);
+	        	Gson gson = new Gson();
+	        	ASNItemDetails asnItemDetails  = gson.fromJson(keyvalue, ASNItemDetails.class);
+	        	asnItemDetails.setItemId(keyStr);
+	        	asnItemDetails.setPoNum(po);
+	        	asnItemDetailsList.add(asnItemDetails);
+	    });
+		logger.info("The ASN items list are ----> : "+asnItemDetailsList.toString());
+		return asnItemDetailsList;
 	}
 	
 	public String generateEway() {

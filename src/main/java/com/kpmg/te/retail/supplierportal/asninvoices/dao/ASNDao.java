@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kpmg.te.retail.supplierportal.asninvoices.constants.ASNInvoiceConstants;
+import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNStores;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNSupplierSites;
@@ -191,24 +192,28 @@ public class ASNDao {
 		return status;
 	}
 
-	public ArrayList<PurchaseOrderMaster> getPOitems(String[] poIdList) throws SQLException, ClassNotFoundException {
-		ArrayList<PurchaseOrderMaster> poMasterList = new ArrayList<PurchaseOrderMaster>();
+	public ArrayList<ASNItemDetails> getPOitems(String[] poIdList) throws SQLException, ClassNotFoundException {
+		ArrayList<PurchaseOrderMaster> poItemsList = new ArrayList<PurchaseOrderMaster>();
 		PurchaseOrderMaster poMaster = null;
 		Connection conn = getConnectioDetails();
+		ArrayList<ASNItemDetails> asnItemDetailsList = new ArrayList<ASNItemDetails>();
 		for (String po : poIdList) {
 			String query = "SELECT  * from SUPPLIER_PORTAL.PURCHASE_ORDER_MASTER WHERE PO_NUMBER = '" + po + "'";
+			logger.info(query);
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
+				// logger.info("The result set data is: " + rs.toString());
 				poMaster = new PurchaseOrderMaster();
-				poMaster.setPoNumber(rs.getString("ITEM_DETAILS"));
-				poMasterList.add(poMaster);
-				logger.info("item_details is"+ poMaster);
+				poMaster.setPoNumber(po);
+				poMaster.setItemDetails(rs.getString("ITEM_DETAILS"));
+				// logger.info(poMaster.toString());
+				asnInvoiceUtils.jsonASNManipulate(poMaster.getItemDetails(), po, asnItemDetailsList);
+				poItemsList.add(poMaster);
+				logger.info("The poItemsList is: " + poItemsList.toString());
 			}
 		}
-		logger.info("PO MASTER LIST IS : " + poMasterList);
-		return poMasterList;
-		// **** ITEM DETAILS FIELD SHOULD BE A JSON OBJECT ***************//
+		return asnItemDetailsList;
 	}
 	
 	public String generateEway() {
