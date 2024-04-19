@@ -41,7 +41,7 @@ public class ASNService {
 	/************************************************************************************************************************************************************************** */
 	/*													ASN MODULE REST END-POINTS                                                                                             */
 	/**************************************************************************************************************************************************************************/
-	@RequestMapping(path = "/asn/getAllASNListingData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/getAllASNListingData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<ASNMaster> getAllANSDataListing() throws ClassNotFoundException, SQLException {
 		ArrayList<ASNMaster> asnMasterList = new ArrayList<ASNMaster>();
 		asnMasterList = asnController.getAllASNListingData();
@@ -49,7 +49,7 @@ public class ASNService {
 		return  asnMasterList;
 	}
 	
-	@RequestMapping(path = "/asn/getAllASNDetails", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/getAllASNDetails", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ASNMaster getAllANSDataListing(@RequestParam(value="asnId") String asnId) throws ClassNotFoundException, SQLException {
 		ASNMaster asnMaster = new ASNMaster();
 		asnMaster = asnController.getAllASNDetailsData(asnId);
@@ -57,7 +57,7 @@ public class ASNService {
 		return  asnMaster;
 	}
 	
-	@RequestMapping(path = "/asn/getStoresListASN", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/getStoresListASN", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<ASNStores> getStoresListASN() throws ClassNotFoundException, SQLException {
 		ArrayList<ASNStores> asnStoresList = new ArrayList<ASNStores>();
 		asnStoresList = asnController.getAllASNStoresData();
@@ -65,7 +65,7 @@ public class ASNService {
 		return  asnStoresList;
 	}
 	
-	@RequestMapping(path = "/asn/getAllSupplierSites", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/getAllSupplierSites", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<ASNSupplierSites> getAllSupplierSites() throws ClassNotFoundException, SQLException {
 		ArrayList<ASNSupplierSites> asnSupplierSiteList = new ArrayList<ASNSupplierSites>();
 		asnSupplierSiteList = asnController.getAllSupplierSiteData();
@@ -73,7 +73,7 @@ public class ASNService {
 		return  asnSupplierSiteList;
 	}
 	
-	@RequestMapping(path = "/asn/getPoItems", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/getPoItems", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<PurchaseOrderMaster> getPoItemsForASN(@RequestParam(value="poIdArray[]") String[] poIdList) throws ClassNotFoundException, SQLException {
 		ArrayList<PurchaseOrderMaster> poItemsList  = new ArrayList<PurchaseOrderMaster>();
 		poItemsList = asnController.getPoItems(poIdList);
@@ -81,7 +81,7 @@ public class ASNService {
 		return  poItemsList;
 	}
 	
-	@RequestMapping(path = "/asn/saveASN", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/saveASN", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<POItems> saveASN(@RequestBody ASNMaster asnMaster) throws ClassNotFoundException, SQLException {
 		ArrayList<POItems> poItemsList  = new ArrayList<POItems>();
 		asnController.saveASN(asnMaster);
@@ -89,12 +89,28 @@ public class ASNService {
 		return  poItemsList;
 	}
 	
-	@RequestMapping(path = "/asn/getStoresListInvoices", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/getStoresListInvoices", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<ASNStores> getStoresListInvoices() throws ClassNotFoundException, SQLException {
 		ArrayList<ASNStores> asnStoresList = new ArrayList<ASNStores>();
 		asnStoresList = asnController.getAllASNStoresData();
 		logger.info("[C]ASNInvoiceService::[M]getAllANSDataListing -> The ASN List to display is: "+asnStoresList.toString());
 		return  asnStoresList;
+	}
+	
+	@RequestMapping(path = "/generateEway", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String generateEway() throws ClassNotFoundException, SQLException {
+		String ewayBillList = new String();
+		ewayBillList = asnController.generateEway();
+		logger.info("[C]CustomerOrderService::[M]getCODetails -> The Customer Order Details list to display is: "+ewayBillList.toString());
+		return  ewayBillList;
+	}
+	
+	@RequestMapping(path = "/generateAWB", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String generateAWB() throws ClassNotFoundException, SQLException {
+		String awbBill = new  String();
+		awbBill = asnController.generateAWB();
+		logger.info("[C]CustomerOrderService::[M]generateAWB -> The Customer Order Details list to display is: "+awbBill.toString());
+		return  awbBill;
 	}
 
 }

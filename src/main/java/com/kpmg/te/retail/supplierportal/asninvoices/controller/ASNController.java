@@ -44,6 +44,14 @@ public class ASNController {
 		ArrayList<PurchaseOrderMaster> poMasterItemsList = asnDao.getPOitems(poIdList);
 		return poMasterItemsList;
 	}
+	
+	public String generateEway() {
+		return asnDao.generateEway();
+	}
+
+	public String generateAWB() {
+		return asnDao.generateAWB();
+	}
 
 
 

@@ -171,28 +171,12 @@ public class ASNDao {
 			pstmt.setString(18, asnMaster.getPermitLevel());
 			pstmt.setString(19, asnMaster.getModeOfTransport());
 			pstmt.setString(20, asnMaster.getTransportCompName());
-			
 			pstmt.setString(16, asnMaster.getConsignmentWeight());
 			pstmt.setString(7, asnMaster.getContainerDetails());
-			
 			pstmt.setString(6, asnMaster.getPoNum());
-
-			
-	
-
-
-			
-			
-			
-		
-
-			
 			pstmt.setString(18, asnMaster.getShippingAddr());
 			pstmt.setString(19, asnMaster.getDelAddr());
 			pstmt.setString(20, asnMaster.getConsignmentCost());
-			
-			
-			
 			pstmt.setString(24, asnMaster.getEwayBillNo());
 			pstmt.setString(25, asnMaster.getPreferredDelDate());
 			pstmt.setString(26, asnMaster.getPreferredDelTime());
@@ -225,6 +209,14 @@ public class ASNDao {
 		logger.info("PO MASTER LIST IS : " + poMasterList);
 		return poMasterList;
 		// **** ITEM DETAILS FIELD SHOULD BE A JSON OBJECT ***************//
+	}
+	
+	public String generateEway() {
+		return asnInvoiceUtils.generateEway();
+	}
+
+	public String generateAWB() {
+		return asnInvoiceUtils.generateAWB();
 	}
 
 }

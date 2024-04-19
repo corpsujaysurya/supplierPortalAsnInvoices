@@ -82,6 +82,20 @@ public class ASNInvoiceUtils {
 		logger.info("The invoiced items list are ----> : "+invoiceItemDetailsList.toString());
 		return invoiceItemDetailsList;
 	}
+	
+	public String generateEway() {
+		String ewayBill = "EWAY-" + generateRandomNumber(9);
+		logger.info(
+				"[C]ASNInvoiceUtils::[M]generateEway -> The Eway Bill generated is:" + ewayBill.toString());
+		return ewayBill;
+	}
+
+	public String generateAWB() {
+		String awbBill = "AWB-" + generateRandomNumber(12);
+		logger.info(
+				"[C]ASNInvoiceUtils::[M]generateAWB -> The AWB generated is:" + awbBill.toString());
+		return awbBill;
+	}
 
 
 }
