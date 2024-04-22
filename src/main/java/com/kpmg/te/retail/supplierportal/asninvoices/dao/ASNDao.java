@@ -224,4 +224,8 @@ public class ASNDao {
 		return asnInvoiceUtils.generateAWB();
 	}
 
+	public String generateDC() {
+		return asnInvoiceUtils.generateDC();
+	}
+
 }

@@ -53,6 +53,10 @@ public class ASNController {
 		return asnDao.generateAWB();
 	}
 
+	public String generateDC() {
+		return asnDao.generateDC();
+	}
+
 
 
 }

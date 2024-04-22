@@ -97,6 +97,14 @@ public class ASNService {
 		return  asnStoresList;
 	}
 	
+	@RequestMapping(path = "/generateDC", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String generateDC() throws ClassNotFoundException, SQLException {
+		String dc = new String();
+		dc = asnController.generateDC();
+		logger.info("[C]CustomerOrderService::[M]generateDC -> The generated Delivery Challan to display is: "+dc.toString());
+		return  dc;
+	}
+	
 	@RequestMapping(path = "/generateEway", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public String generateEway() throws ClassNotFoundException, SQLException {
 		String ewayBillList = new String();

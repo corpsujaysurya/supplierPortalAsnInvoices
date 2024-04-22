@@ -115,5 +115,12 @@ public class ASNInvoiceUtils {
 		return awbBill;
 	}
 
+	public String generateDC() {
+		String dc = "DC-" + generateRandomNumber(7);
+		logger.info(
+				"[C]ASNInvoiceUtils::[M]generateDC -> The DC generated is:" + dc.toString());
+		return dc;
+	}
+
 
 }
