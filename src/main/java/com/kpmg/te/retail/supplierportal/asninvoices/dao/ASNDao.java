@@ -141,56 +141,6 @@ public class ASNDao {
 		return asnSupplierSitesList;
 	}
 
-	public String saveASNdata(ASNMaster asnMaster) throws SQLException, ClassNotFoundException {
-		Connection conn = null;
-		String status = new String();
-		try {
-			conn = getConnectioDetails();
-			PreparedStatement pstmt = conn.prepareStatement(
-					"INSERT INTO SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER (UNIQUE_ID,ASN_ID,ASN_CREATION_DATE,SHIPPING_DATE,DC_NO,ASN_STATUS,CONTAINER_COUNT,CONTAINER_ID,SHIPPED_QTY,ETA,EWAY_NO,AWB_NO,DRIVER_NAME,VEHICLE_NO,ENGINE_NO,CHASSIS_NO,DL_NO,PERMIT_LEVEL,TRANSPORT_MODE,TRANSPORT_COMPANY_NAME,GROSS_CONTANER_WEIGHT,CONTAINER_DETAILS,RETAILER_STORE,SUPPLIER_SITE,PO_DETAILS"
-							+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			pstmt.setString(1,asnInvoiceUtils.setRandomUUID());
-			pstmt.setString(2, asnInvoiceUtils.generateASNId());
-			pstmt.setString(3, asnInvoiceUtils.generateCurrentDate());
-			pstmt.setString(4, asnMaster.getShippingDate());
-			
-			pstmt.setString(5, asnMaster.getDeliveryNoteNo());
-			pstmt.setString(6, asnMaster.getAsnStatus());
-			pstmt.setString(7, asnMaster.getContainerCount());
-			pstmt.setString(8, asnMaster.getContainerId());
-			pstmt.setString(9, asnMaster.getShippedQty());
-			
-			pstmt.setString(10, asnMaster.getEstimatedDelDate());
-			pstmt.setString(11, asnMaster.getEwayBillNo());
-			pstmt.setString(12, asnMaster.getAwbNo());
-			
-			pstmt.setString(13, asnMaster.getDriverName());
-			pstmt.setString(14, asnMaster.getVehicleNo());
-			pstmt.setString(15, asnMaster.getVehicleEngNo());
-			pstmt.setString(16, asnMaster.getVehicleChassiesNo());
-			pstmt.setString(17, asnMaster.getDriverLicenseNo());
-			pstmt.setString(18, asnMaster.getPermitLevel());
-			pstmt.setString(19, asnMaster.getModeOfTransport());
-			pstmt.setString(20, asnMaster.getTransportCompName());
-			pstmt.setString(16, asnMaster.getConsignmentWeight());
-			pstmt.setString(7, asnMaster.getContainerDetails());
-			pstmt.setString(6, asnMaster.getPoNum());
-			pstmt.setString(18, asnMaster.getShippingAddr());
-			pstmt.setString(19, asnMaster.getDelAddr());
-			pstmt.setString(20, asnMaster.getConsignmentCost());
-			pstmt.setString(24, asnMaster.getEwayBillNo());
-			pstmt.setString(25, asnMaster.getPreferredDelDate());
-			pstmt.setString(26, asnMaster.getPreferredDelTime());
-
-			int updateStatusCode = pstmt.executeUpdate();
-			status = (updateStatusCode == 1 ? ("Record inserted in DB Successfully") : ("Onboarding failed"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeConnection(conn);
-		}
-		return status;
-	}
 
 	public ArrayList<ASNItemDetails> getPOitems(String[] poIdList) throws SQLException, ClassNotFoundException {
 		ArrayList<PurchaseOrderMaster> poItemsList = new ArrayList<PurchaseOrderMaster>();
@@ -226,6 +176,105 @@ public class ASNDao {
 
 	public String generateDC() {
 		return asnInvoiceUtils.generateDC();
+	}
+
+	public String createASN(String asnId, ASNMaster asnMaster, String asnStatus) throws SQLException {
+		Connection conn = null;
+		String status = new String();
+		try {
+			conn = getConnectioDetails();
+			PreparedStatement pstmt = conn.prepareStatement(
+					"INSERT INTO SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER (UNIQUE_ID,ASN_ID,ASN_CREATION_DATE,SHIPPING_DATE,DC_NO,ASN_STATUS,CONTAINER_COUNT,"
+					+ "CONTAINER_ID,SHIPPED_QTY,ETA,EWAY_NO,AWB_NO,DRIVER_NAME,VEHICLE_NO,ENGINE_NO,CHASSIS_NO,DL_NO,"
+					+ "PERMIT_LEVEL,TRANSPORT_MODE,TRANSPORT_COMPANY_NAME,GROSS_CONTANER_WEIGHT,CONTAINER_DETAILS,RETAILER_STORE,SUPPLIER_SITE,PO_DETAILS,CONSIGNMENT_COST"
+							+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			pstmt.setString(1,asnInvoiceUtils.setRandomUUID());
+			pstmt.setString(2, asnId);
+			//pstmt.setString(2, asnInvoiceUtils.generateASNId());
+			pstmt.setString(3, asnInvoiceUtils.generateCurrentDate());
+			pstmt.setString(4, asnMaster.getShippingDate());
+			
+			pstmt.setString(5, asnMaster.getDeliveryNoteNo());
+			pstmt.setString(6, asnStatus);
+			pstmt.setString(7, asnMaster.getContainerCount());
+			pstmt.setString(8, asnMaster.getContainerId());
+			pstmt.setString(9, asnMaster.getShippedQty());
+			
+			pstmt.setString(10, asnMaster.getEstimatedDelDate());
+			pstmt.setString(11, asnMaster.getEwayNo());
+			pstmt.setString(12, asnMaster.getAwbNo());
+			
+			pstmt.setString(13, asnMaster.getDriverName());
+			pstmt.setString(14, asnMaster.getVehicleNo());
+			pstmt.setString(15, asnMaster.getVehicleEngNo());
+			pstmt.setString(16, asnMaster.getVehicleChassiesNo());
+			pstmt.setString(17, asnMaster.getDriverLicenseNo());
+			pstmt.setString(18, asnMaster.getPermitLevel());
+			pstmt.setString(19, asnMaster.getModeOfTransport());
+			pstmt.setString(20, asnMaster.getTransportCompName());
+			pstmt.setString(21, asnMaster.getConsignmentWeight());
+			pstmt.setString(22, asnMaster.getContainerDetails());
+			
+			pstmt.setString(23, asnMaster.getRetailerStore());
+			pstmt.setString(24, asnMaster.getSupplierSite());
+			pstmt.setString(25, asnMaster.getPoNum());
+			pstmt.setString(26, asnMaster.getConsignmentCost());
+
+			int updateStatusCode = pstmt.executeUpdate();
+			status = (updateStatusCode == 1 ? ("Record inserted in DB Successfully") : ("Onboarding failed"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(conn);
+		}
+		return status;
+	}
+
+	public String updateASN(String asnId, ASNMaster asnMaster, String asnStatus) throws SQLException, ClassNotFoundException {
+		Connection conn = getConnectioDetails();
+		String updateStatus = "Invalid";
+		try {
+			conn = getConnectioDetails();
+			String query = "UPDATE SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER SET ASN_CREATION_DATE = ? ,SHIPPING_DATE = ? ,DC_NO = ? ,"
+					     + "ASN_STATUS = ? ,CONTAINER_COUNT = ? ,CONTAINER_ID = ? ,SHIPPED_QTY = ? ,ETA = ? ,EWAY_NO = ? ,AWB_NO = ? ,DRIVER_NAME = ? ,VEHICLE_NO = ? ,"
+					     + "ENGINE_NO = ? ,CHASSIS_NO = ? ,DL_NO = ? ,PERMIT_LEVEL = ? ,TRANSPORT_MODE = ? ,TRANSPORT_COMPANY_NAME = ? ,GROSS_CONTANER_WEIGHT = ? ,"
+					     + "CONTAINER_DETAILS = ? ,RETAILER_STORE = ? ,SUPPLIER_SITE = ? ,PO_DETAILS = ?  WHERE ASN_ID = ?  ";
+			logger.info(query);
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, asnMaster.getAsnCreationDate());
+			pstmt.setString(2, asnMaster.getShippingDate());
+			pstmt.setString(3, asnMaster.getDeliveryNoteNo());
+			pstmt.setString(4, "In-Progress");
+			pstmt.setString(5, asnMaster.getContainerCount());
+			pstmt.setString(6, asnMaster.getContainerId());
+			pstmt.setString(7, asnMaster.getShippedQty());
+			pstmt.setString(8, asnMaster.getEstimatedDelDate());
+			pstmt.setString(9, asnMaster.getEwayNo());
+			pstmt.setString(10, asnMaster.getAwbNo());
+			pstmt.setString(11, asnMaster.getDriverName());
+			pstmt.setString(12, asnMaster.getVehicleNo());
+			pstmt.setString(13, asnMaster.getVehicleEngNo());
+			pstmt.setString(14, asnMaster.getVehicleChassiesNo());
+			pstmt.setString(15, asnMaster.getDriverLicenseNo());
+			pstmt.setString(16, asnMaster.getPermitLevel());
+			pstmt.setString(17, asnMaster.getModeOfTransport());
+			pstmt.setString(18, asnMaster.getTransportCompName());
+			pstmt.setString(19, asnMaster.getConsignmentWeight());
+			pstmt.setString(20, asnMaster.getContainerDetails());
+			pstmt.setString(21, asnMaster.getRetailerStore());
+			pstmt.setString(22, asnMaster.getSupplierSite());
+			pstmt.setString(23, asnMaster.getPoNum());
+			pstmt.setString(24, asnId);
+			int updateStatusCode = pstmt.executeUpdate();
+			logger.info(Integer.toString(updateStatusCode));
+			updateStatus = (updateStatusCode == 1) ? ("SUCCESS") : ("FAILURE");
+			pstmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(conn);
+		}
+		return updateStatus;
 	}
 
 }

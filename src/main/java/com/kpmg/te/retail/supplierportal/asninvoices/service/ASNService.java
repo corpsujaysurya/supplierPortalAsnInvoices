@@ -17,7 +17,6 @@ import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNItemDetails;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNMaster;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNStores;
 import com.kpmg.te.retail.supplierportal.asninvoices.entity.ASNSupplierSites;
-import com.kpmg.te.retail.supplierportal.asninvoices.entity.POItems;
 import com.kpmg.te.retail.supplierportal.asninvoices.manager.ASNManager;
 import com.kpmg.te.retail.supplierportal.asninvoices.utils.ASNInvoiceUtils;
 
@@ -81,12 +80,18 @@ public class ASNService {
 		return  asnItemDetailsList;
 	}
 	
+
 	@RequestMapping(path = "/saveASN", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<POItems> saveASN(@RequestBody ASNMaster asnMaster) throws ClassNotFoundException, SQLException {
-		ArrayList<POItems> poItemsList  = new ArrayList<POItems>();
-		asnController.saveASN(asnMaster);
-		logger.info("[C]ASNService::[M]getPoItems -> The payment reminder list to display is: "+poItemsList.toString());
-		return  poItemsList;
+	public String saveASN(@RequestParam String asnId,@RequestBody ASNMaster asnMaster,@RequestParam String asnStatus) throws ClassNotFoundException, SQLException {
+		String responseMsg = null;
+		if(asnId==null || asnId.trim().equalsIgnoreCase("")) {
+			responseMsg =asnController.createASN(asnId,asnMaster,asnStatus);
+		}else {
+			responseMsg =asnController.updateASN(asnId,asnMaster,asnStatus);
+		}
+		
+		logger.info("[C]ASNService::[M]saveASN -> The ASN has been saved successfully");
+		return  responseMsg;
 	}
 	
 	@RequestMapping(path = "/getStoresListInvoices", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

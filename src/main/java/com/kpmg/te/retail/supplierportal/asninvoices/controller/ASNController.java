@@ -34,12 +34,6 @@ public class ASNController {
 		return asnDao.getAsnSupplierSites();
 	}
 
-	public String saveASN(ASNMaster asnMaster) throws ClassNotFoundException, SQLException {
-		String status = asnDao.saveASNdata(asnMaster);
-		return status;
-		
-	}
-
 	public ArrayList<ASNItemDetails> getPoItems(String[] poIdList) throws ClassNotFoundException, SQLException {
 		ArrayList<ASNItemDetails> asnItemDetailsList = asnDao.getPOitems(poIdList);
 		return asnItemDetailsList;
@@ -57,6 +51,13 @@ public class ASNController {
 		return asnDao.generateDC();
 	}
 
+	public String createASN(String asnId, ASNMaster asnMaster, String asnStatus) throws SQLException {
+		return asnDao.createASN(asnId,asnMaster,asnStatus);
+	}
+
+	public String updateASN(String asnId, ASNMaster asnMaster, String asnStatus) throws ClassNotFoundException, SQLException {
+		return asnDao.updateASN(asnId,asnMaster,"In-Progress");
+	}
 
 
 }

@@ -1,5 +1,7 @@
 package com.kpmg.te.retail.supplierportal.asninvoices.entity;
 
+import java.util.Objects;
+
 public class ASNMaster {
 
 	private String uniqueId;
@@ -29,8 +31,8 @@ public class ASNMaster {
 	private String permitLevel;
 	private String vehicleEngNo;
 	private String vehicleChassiesNo;
-	private String ewayBillNo;
-	private String ewayBillDate;
+	private String retailerStore;
+	private String supplierSite;
 	private String preferredDelDate;
 	private String preferredDelTime;
 
@@ -242,20 +244,20 @@ public class ASNMaster {
 		this.vehicleChassiesNo = vehicleChassiesNo;
 	}
 
-	public String getEwayBillNo() {
-		return ewayBillNo;
+	public String getRetailerStore() {
+		return retailerStore;
 	}
 
-	public void setEwayBillNo(String ewayBillNo) {
-		this.ewayBillNo = ewayBillNo;
+	public void setRetailerStore(String retailerStore) {
+		this.retailerStore = retailerStore;
 	}
 
-	public String getEwayBillDate() {
-		return ewayBillDate;
+	public String getSupplierSite() {
+		return supplierSite;
 	}
 
-	public void setEwayBillDate(String ewayBillDate) {
-		this.ewayBillDate = ewayBillDate;
+	public void setSupplierSite(String supplierSite) {
+		this.supplierSite = supplierSite;
 	}
 
 	public String getPreferredDelDate() {
@@ -275,6 +277,48 @@ public class ASNMaster {
 	}
 
 	@Override
+	public int hashCode() {
+		return Objects.hash(asnCreationDate, asnId, asnStatus, awbNo, consignmentCost, consignmentWeight,
+				containerCount, containerDetails, containerId, delAddr, deliveryNoteNo, driverLicenseNo, driverName,
+				estimatedDelDate, ewayNo, modeOfTransport, permitLevel, poNum, preferredDelDate, preferredDelTime,
+				retailerStore, shippedQty, shippingAddr, shippingDate, supplierSite, transportCompName, uniqueId,
+				vehicleChassiesNo, vehicleEngNo, vehicleNo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ASNMaster other = (ASNMaster) obj;
+		return Objects.equals(asnCreationDate, other.asnCreationDate) && Objects.equals(asnId, other.asnId)
+				&& Objects.equals(asnStatus, other.asnStatus) && Objects.equals(awbNo, other.awbNo)
+				&& Objects.equals(consignmentCost, other.consignmentCost)
+				&& Objects.equals(consignmentWeight, other.consignmentWeight)
+				&& Objects.equals(containerCount, other.containerCount)
+				&& Objects.equals(containerDetails, other.containerDetails)
+				&& Objects.equals(containerId, other.containerId) && Objects.equals(delAddr, other.delAddr)
+				&& Objects.equals(deliveryNoteNo, other.deliveryNoteNo)
+				&& Objects.equals(driverLicenseNo, other.driverLicenseNo)
+				&& Objects.equals(driverName, other.driverName)
+				&& Objects.equals(estimatedDelDate, other.estimatedDelDate) && Objects.equals(ewayNo, other.ewayNo)
+				&& Objects.equals(modeOfTransport, other.modeOfTransport)
+				&& Objects.equals(permitLevel, other.permitLevel) && Objects.equals(poNum, other.poNum)
+				&& Objects.equals(preferredDelDate, other.preferredDelDate)
+				&& Objects.equals(preferredDelTime, other.preferredDelTime)
+				&& Objects.equals(retailerStore, other.retailerStore) && Objects.equals(shippedQty, other.shippedQty)
+				&& Objects.equals(shippingAddr, other.shippingAddr) && Objects.equals(shippingDate, other.shippingDate)
+				&& Objects.equals(supplierSite, other.supplierSite)
+				&& Objects.equals(transportCompName, other.transportCompName)
+				&& Objects.equals(uniqueId, other.uniqueId)
+				&& Objects.equals(vehicleChassiesNo, other.vehicleChassiesNo)
+				&& Objects.equals(vehicleEngNo, other.vehicleEngNo) && Objects.equals(vehicleNo, other.vehicleNo);
+	}
+
+	@Override
 	public String toString() {
 		return "ASNMaster [uniqueId=" + uniqueId + ", asnId=" + asnId + ", asnCreationDate=" + asnCreationDate
 				+ ", shippingDate=" + shippingDate + ", deliveryNoteNo=" + deliveryNoteNo + ", asnStatus=" + asnStatus
@@ -285,8 +329,8 @@ public class ASNMaster {
 				+ transportCompName + ", consignmentWeight=" + consignmentWeight + ", driverLicenseNo="
 				+ driverLicenseNo + ", shippingAddr=" + shippingAddr + ", delAddr=" + delAddr + ", consignmentCost="
 				+ consignmentCost + ", permitLevel=" + permitLevel + ", vehicleEngNo=" + vehicleEngNo
-				+ ", vehicleChassiesNo=" + vehicleChassiesNo + ", ewayBillNo=" + ewayBillNo + ", ewayBillDate="
-				+ ewayBillDate + ", preferredDelDate=" + preferredDelDate + ", preferredDelTime=" + preferredDelTime
+				+ ", vehicleChassiesNo=" + vehicleChassiesNo + ", retailerStore=" + retailerStore + ", supplierSite="
+				+ supplierSite + ", preferredDelDate=" + preferredDelDate + ", preferredDelTime=" + preferredDelTime
 				+ "]";
 	}
 
