@@ -85,9 +85,9 @@ public class ASNService {
 	public String saveASN(@RequestParam  String asnId,@RequestBody ASNMaster asnMaster,@RequestParam String asnStatus) throws ClassNotFoundException, SQLException {
 		String responseMsg = null;
 		Boolean asnExists = asnManager.checkASNexists(asnId);
-		if(asnId==null || asnId.trim().equalsIgnoreCase("")) {
+		if(asnExists == false) {
 			responseMsg =asnController.createASN(asnId,asnMaster,asnStatus);
-		}else {
+		}else if(asnExists == true) {
 			responseMsg =asnController.updateASN(asnId,asnMaster,asnStatus);
 		}
 		
