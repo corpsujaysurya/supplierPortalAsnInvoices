@@ -244,7 +244,7 @@ public class ASNDao {
 			pstmt.setString(1, asnMaster.getAsnCreationDate());
 			pstmt.setString(2, asnMaster.getShippingDate());
 			pstmt.setString(3, asnMaster.getDeliveryNoteNo());
-			pstmt.setString(4, "In-Progress");
+			pstmt.setString(4, asnStatus);
 			pstmt.setString(5, asnMaster.getContainerCount());
 			pstmt.setString(6, asnMaster.getContainerId());
 			pstmt.setString(7, asnMaster.getShippedQty());
@@ -275,6 +275,23 @@ public class ASNDao {
 			closeConnection(conn);
 		}
 		return updateStatus;
+	}
+
+	public Boolean checkIfASNidExists(String asnId) throws ClassNotFoundException, SQLException {
+		boolean status=false;
+		Connection conn = getConnectioDetails();
+		String query = "SELECT  ASN_ID FROM SUPPLIER_PORTAL.ASN_MASTER WHERE ASN_ID = ?";
+		logger.info(query);
+		PreparedStatement pstmt = conn.prepareStatement(query);
+		pstmt.setString(1, asnId);
+		ResultSet rs = pstmt.executeQuery(query);
+		while (rs.next()) {
+			String id = rs.getString("ASN_ID");
+			if(id!=null && id.trim()!="") {
+				status=true;
+			}
+		}
+		return status;
 	}
 
 }

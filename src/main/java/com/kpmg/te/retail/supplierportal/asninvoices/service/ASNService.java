@@ -82,8 +82,9 @@ public class ASNService {
 	
 
 	@RequestMapping(path = "/saveASN", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String saveASN(@RequestParam String asnId,@RequestBody ASNMaster asnMaster,@RequestParam String asnStatus) throws ClassNotFoundException, SQLException {
+	public String saveASN(@RequestParam  String asnId,@RequestBody ASNMaster asnMaster,@RequestParam String asnStatus) throws ClassNotFoundException, SQLException {
 		String responseMsg = null;
+		Boolean asnExists = asnManager.checkASNexists(asnId);
 		if(asnId==null || asnId.trim().equalsIgnoreCase("")) {
 			responseMsg =asnController.createASN(asnId,asnMaster,asnStatus);
 		}else {
