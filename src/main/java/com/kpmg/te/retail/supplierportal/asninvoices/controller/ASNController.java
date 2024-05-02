@@ -56,7 +56,7 @@ public class ASNController {
 	}
 
 	public String updateASN(String asnId, ASNMaster asnMaster, String asnStatus) throws ClassNotFoundException, SQLException {
-		return asnDao.updateASN(asnId,asnMaster,"In-Progress");
+		return asnDao.updateASN(asnId,asnMaster,asnStatus);
 	}
 
 

@@ -87,11 +87,13 @@ public class ASNService {
 		Boolean asnExists = asnManager.checkASNexists(asnId);
 		if(asnExists == false) {
 			responseMsg =asnController.createASN(asnId,asnMaster,asnStatus);
+			logger.info("[C]ASNService::[M]saveASN -> The ASN has been saved successfully");
 		}else if(asnExists == true) {
 			responseMsg =asnController.updateASN(asnId,asnMaster,asnStatus);
+			logger.info("[C]ASNService::[M]saveASN -> The ASN has been updated successfully");
 		}
 		
-		logger.info("[C]ASNService::[M]saveASN -> The ASN has been saved successfully");
+		
 		return  responseMsg;
 	}
 	

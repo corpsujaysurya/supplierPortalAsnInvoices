@@ -183,15 +183,18 @@ public class ASNDao {
 		String status = new String();
 		try {
 			conn = getConnectioDetails();
+			conn.setAutoCommit(true);
 			PreparedStatement pstmt = conn.prepareStatement(
-					"INSERT INTO SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER (UNIQUE_ID,ASN_ID,ASN_CREATION_DATE,SHIPPING_DATE,DC_NO,ASN_STATUS,CONTAINER_COUNT,"
+					"INSERT INTO SUPPLIER_PORTAL.ASN_MASTER (UNIQUE_ID,ASN_ID,ASN_CREATION_DATE,SHIPPING_DATE,DC_NO,ASN_STATUS,CONTAINER_COUNT,"
 					+ "CONTAINER_ID,SHIPPED_QTY,ETA,EWAY_NO,AWB_NO,DRIVER_NAME,VEHICLE_NO,ENGINE_NO,CHASSIS_NO,DL_NO,"
-					+ "PERMIT_LEVEL,TRANSPORT_MODE,TRANSPORT_COMPANY_NAME,GROSS_CONTANER_WEIGHT,CONTAINER_DETAILS,RETAILER_STORE,SUPPLIER_SITE,PO_DETAILS,CONSIGNMENT_COST"
+					+ "PERMIT_LEVEL,TRANSPORT_MODE,TRANSPORT_COMPANY_NAME,GROSS_CONTANER_WEIGHT,CONTAINER_DETAILS,RETAILER_STORE,SUPPLIER_SITE,PO_DETAILS,CONSIGNMENT_COST)"
 							+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			pstmt.setString(1,asnInvoiceUtils.setRandomUUID());
+			String uniqId = asnInvoiceUtils.setRandomUUID();
+			String currentDate = asnInvoiceUtils.generateCurrentDate();
+			pstmt.setString(1,uniqId);
 			pstmt.setString(2, asnId);
 			//pstmt.setString(2, asnInvoiceUtils.generateASNId());
-			pstmt.setString(3, asnInvoiceUtils.generateCurrentDate());
+			pstmt.setString(3,currentDate);
 			pstmt.setString(4, asnMaster.getShippingDate());
 			
 			pstmt.setString(5, asnMaster.getDeliveryNoteNo());
@@ -219,9 +222,10 @@ public class ASNDao {
 			pstmt.setString(24, asnMaster.getSupplierSite());
 			pstmt.setString(25, asnMaster.getPoNum());
 			pstmt.setString(26, asnMaster.getConsignmentCost());
-
+			//pstmt.addBatch();
+			//pstmt.executeBatch();
 			int updateStatusCode = pstmt.executeUpdate();
-			status = (updateStatusCode == 1 ? ("Record inserted in DB Successfully") : ("Onboarding failed"));
+			status = (updateStatusCode == 1 ? ("SUCCESS") : ("FAIL"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -235,7 +239,7 @@ public class ASNDao {
 		String updateStatus = "Invalid";
 		try {
 			conn = getConnectioDetails();
-			String query = "UPDATE SUPPLIER_PORTAL.SUPPLIER_ASN_MASTER SET ASN_CREATION_DATE = ? ,SHIPPING_DATE = ? ,DC_NO = ? ,"
+			String query = "UPDATE SUPPLIER_PORTAL.ASN_MASTER SET ASN_CREATION_DATE = ? ,SHIPPING_DATE = ? ,DC_NO = ? ,"
 					     + "ASN_STATUS = ? ,CONTAINER_COUNT = ? ,CONTAINER_ID = ? ,SHIPPED_QTY = ? ,ETA = ? ,EWAY_NO = ? ,AWB_NO = ? ,DRIVER_NAME = ? ,VEHICLE_NO = ? ,"
 					     + "ENGINE_NO = ? ,CHASSIS_NO = ? ,DL_NO = ? ,PERMIT_LEVEL = ? ,TRANSPORT_MODE = ? ,TRANSPORT_COMPANY_NAME = ? ,GROSS_CONTANER_WEIGHT = ? ,"
 					     + "CONTAINER_DETAILS = ? ,RETAILER_STORE = ? ,SUPPLIER_SITE = ? ,PO_DETAILS = ?  WHERE ASN_ID = ?  ";
@@ -280,10 +284,9 @@ public class ASNDao {
 	public Boolean checkIfASNidExists(String asnId) throws ClassNotFoundException, SQLException {
 		boolean status=false;
 		Connection conn = getConnectioDetails();
-		String query = "SELECT  ASN_ID FROM SUPPLIER_PORTAL.ASN_MASTER WHERE ASN_ID = ?";
+		String query = "SELECT ASN_ID FROM SUPPLIER_PORTAL.ASN_MASTER WHERE ASN_ID ='"+asnId+"'";
 		logger.info(query);
 		PreparedStatement pstmt = conn.prepareStatement(query);
-		pstmt.setString(1, asnId);
 		ResultSet rs = pstmt.executeQuery(query);
 		while (rs.next()) {
 			String id = rs.getString("ASN_ID");
