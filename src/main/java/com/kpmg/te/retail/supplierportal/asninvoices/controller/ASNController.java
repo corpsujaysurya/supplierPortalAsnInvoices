@@ -59,5 +59,9 @@ public class ASNController {
 		return asnDao.updateASN(asnId,asnMaster,asnStatus);
 	}
 
+	public String dispatchASN(String asnId) throws SQLException {
+		return asnDao.dispASN(asnId);
+	}
+
 
 }

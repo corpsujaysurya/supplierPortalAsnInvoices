@@ -297,4 +297,26 @@ public class ASNDao {
 		return status;
 	}
 
+
+	public String dispASN(String asnId) throws SQLException {
+		Connection conn = null;
+		String updateStatus = "Invalid";
+		try {
+			conn = getConnectioDetails();
+			String query = "UPDATE SUPPLIER_PORTAL.ASN_MASTER SET ASN_STATUS = 'Ready For Pickup' WHERE ASN_ID = ?  ";
+			logger.info(query);
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, asnId);
+			int updateStatusCode = pstmt.executeUpdate();
+			logger.info(Integer.toString(updateStatusCode));
+			updateStatus = (updateStatusCode == 1) ? ("SUCCESS") : ("FAILURE");
+			pstmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(conn);
+		}
+		return updateStatus;
+	}
+
 }

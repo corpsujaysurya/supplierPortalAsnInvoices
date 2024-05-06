@@ -92,8 +92,14 @@ public class ASNService {
 			responseMsg =asnController.updateASN(asnId,asnMaster,asnStatus);
 			logger.info("[C]ASNService::[M]saveASN -> The ASN has been updated successfully");
 		}
-		
-		
+		return  responseMsg;
+	}
+	
+	@RequestMapping(path = "/dispatchASN", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String dispatchASN(@RequestParam  String asnId) throws ClassNotFoundException, SQLException {
+		String responseMsg = null;
+			responseMsg =asnController.dispatchASN(asnId);
+			logger.info("[C]ASNService::[M]saveASN -> The ASN status has been updated successfully");
 		return  responseMsg;
 	}
 	
